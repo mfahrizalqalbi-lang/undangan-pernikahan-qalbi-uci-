@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Undangan Pernikahan Qalbi & Uci</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+ margin:0;
+ font-family:'Cormorant Garamond', serif;
+ background:#f8f5f2;
+ color:#2b2b2b;
+ text-align:center;
+ overflow-x:hidden;
+}
+
+section{
+ padding:80px 20px;
+}
+
+.hero{
+ height:100vh;
+ background:url('img/bg.jpg') center/cover;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ flex-direction:column;
+ color:white;
+ position:relative;
+}
+
+.hero::after{
+ content:"";
+ position:absolute;
+ top:0;left:0;
+ width:100%;height:100%;
+ background:rgba(0,0,0,0.5);
+}
+
+.hero-content{
+ position:relative;
+ z-index:2;
+}
+
+h1{
+ font-size:40px;
+ letter-spacing:2px;
+}
+
+h2{
+ color:#c6a46c;
+}
+
+button{
+ padding:12px 25px;
+ border:none;
+ background:#c6a46c;
+ color:white;
+ border-radius:30px;
+ font-size:16px;
+}
+
+.mempelai img{
+ width:150px;
+ border-radius:50%;
+}
+
+.countdown{
+ font-size:22px;
+ margin-top:20px;
+}
+
+.gallery img{
+ width:90%;
+ margin:10px 0;
+ border-radius:10px;
+}
+
+iframe{
+ width:100%;
+ height:300px;
+ border:none;
+ border-radius:10px;
+}
+
+.music-btn{
+ position:fixed;
+ bottom:20px;
+ right:20px;
+ background:#c6a46c;
+ width:50px;
+ height:50px;
+ border-radius:50%;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ color:white;
+ z-index:999;
+}
+</style>
+</head>
+
+<body>
+
+<!-- COVER -->
+<div id="cover" class="hero">
+  <div class="hero-content">
+    <p>Kepada Yth:</p>
+    <h2 id="namaTamu">Tamu Undangan</h2>
+    <h1>Qalbi & Uci</h1>
+    <button onclick="bukaUndangan()">Buka Undangan</button>
+  </div>
+</div>
+
+<!-- ISI -->
+<div id="isi" style="display:none;">
+
+<section>
+<h1>Muh. Fahrizal Qalbi</h1>
+<p>&</p>
+<h1>Uci Dwi Kurniawati</h1>
+</section>
+
+<section>
+<h2>Save The Date</h2>
+<p>9 Juni 2026</p>
+<div id="countdown" class="countdown"></div>
+</section>
+
+<section class="gallery">
+<h2>Gallery</h2>
+<img src="img/1.jpg">
+<img src="img/2.jpg">
+<img src="img/3.jpg">
+</section>
+
+<section>
+<h2>Lokasi</h2>
+<p>Jl. Maccini Gusung Setapak 15</p>
+<iframe src="https://www.google.com/maps?q=Jl.+Maccini+Gusung+Setapak+15&output=embed"></iframe>
+</section>
+
+<section>
+<h2>Terima Kasih</h2>
+<p>Merupakan suatu kehormatan bagi kami...</p>
+</section>
+
+</div>
+
+<!-- AUDIO -->
+<audio id="music" loop>
+<source src="musik.mp3" type="audio/mpeg">
+</audio>
+
+<div class="music-btn" onclick="toggleMusic()">♪</div>
+
+<script>
+// buka
+function bukaUndangan(){
+ document.getElementById("cover").style.display="none";
+ document.getElementById("isi").style.display="block";
+ document.getElementById("music").play();
+}
+
+// musik
+function toggleMusic(){
+ const m=document.getElementById("music");
+ if(m.paused){m.play()}else{m.pause()}
+}
+
+// countdown
+const target = new Date("June 9, 2026 10:00:00").getTime();
+
+setInterval(()=>{
+ const now = new Date().getTime();
+ const d = target-now;
+
+ const hari = Math.floor(d/(1000*60*60*24));
+ const jam = Math.floor((d%(1000*60*60*24))/(1000*60*60));
+ const menit = Math.floor((d%(1000*60*60))/(1000*60));
+
+ document.getElementById("countdown").innerHTML =
+ hari+" Hari "+jam+" Jam "+menit+" Menit";
+},1000);
+
+// nama tamu
+const params = new URLSearchParams(window.location.search);
+const nama = params.get("to");
+if(nama){
+ document.getElementById("namaTamu").innerText = nama;
+}
+</script>
+
+</body>
+</html>

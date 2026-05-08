@@ -1,0 +1,158 @@
+from pathlib import Path
+from zipfile import ZipFile
+from PIL import Image, ImageDraw
+import textwrap
+
+base = Path('/mnt/data/undangan_bugis_hijau')
+base.mkdir(exist_ok=True)
+
+html = """<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Undangan Pernikahan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="hero">
+    <div class="overlay">
+      <div class="content">
+        <p class="small">The Wedding Of</p>
+        <h1>Muh. Fahrizal Qalbi</h1>
+        <div class="and">&</div>
+        <h1>Uci Dwi Kurniawati</h1>
+
+        <div class="card">
+          <h2>Save The Date</h2>
+          <p>7 Juni 2026</p>
+          <p>Pukul 19.00 WITA</p>
+          <p>Jl. Maccini Gusung Setapak 15 (Poros)</p>
+        </div>
+
+        <a class="btn" href="https://maps.google.com" target="_blank">Lihat Lokasi</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+"""
+
+css = """
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family: Georgia, serif;
+  background:#0f2d1f;
+  color:white;
+}
+
+.hero{
+  background:url('bg.jpg') center/cover no-repeat;
+  min-height:100vh;
+}
+
+.overlay{
+  min-height:100vh;
+  background:rgba(0,0,0,0.45);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.content{
+  text-align:center;
+  max-width:700px;
+}
+
+.small{
+  letter-spacing:4px;
+  margin-bottom:20px;
+  color:#d6e7d0;
+}
+
+h1{
+  font-size:3rem;
+  color:#d9f5d0;
+  margin:10px 0;
+}
+
+.and{
+  font-size:2rem;
+  margin:10px 0;
+}
+
+.card{
+  margin-top:30px;
+  background:rgba(255,255,255,0.12);
+  padding:25px;
+  border-radius:20px;
+  backdrop-filter:blur(8px);
+}
+
+.card h2{
+  margin-bottom:15px;
+  color:#d9f5d0;
+}
+
+.card p{
+  margin:8px 0;
+  font-size:1.1rem;
+}
+
+.btn{
+  display:inline-block;
+  margin-top:25px;
+  padding:14px 28px;
+  background:#4f8b5c;
+  color:white;
+  text-decoration:none;
+  border-radius:30px;
+  transition:0.3s;
+}
+
+.btn:hover{
+  background:#6fa97b;
+}
+
+@media(max-width:600px){
+  h1{
+    font-size:2rem;
+  }
+
+  .card{
+    padding:18px;
+  }
+}
+"""
+
+# create simple aesthetic green bg image
+img = Image.new("RGB", (1200, 2000), "#1b4332")
+draw = ImageDraw.Draw(img)
+
+for i in range(0, 1200, 40):
+    draw.line((i, 0, i, 2000), fill="#2d6a4f", width=2)
+
+for y in range(0, 2000, 60):
+    draw.line((0, y, 1200, y), fill="#40916c", width=1)
+
+draw.ellipse((150, 250, 1050, 1150), outline="#d8f3dc", width=8)
+
+quote = "Adat Bugis Makassar • Elegant Green Aesthetic"
+draw.text((180, 950), quote, fill="#d8f3dc")
+
+(base / "index.html").write_text(html, encoding="utf-8")
+(base / "style.css").write_text(css, encoding="utf-8")
+img.save(base / "bg.jpg")
+
+zip_path = "/mnt/data/undangan_bugis_hijau.zip"
+with ZipFile(zip_path, 'w') as zipf:
+    for file in base.iterdir():
+        zipf.write(file, arcname=file.name)
+
+print("Selesai:", zip_path)
